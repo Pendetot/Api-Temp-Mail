@@ -1,0 +1,18 @@
+{
+  "name": "telegram-tempmail-bot",
+  "version": "1.0.0",
+  "description": "Bot Telegram untuk layanan email sementara",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "0.61.0",
+    "mailparser": "^3.6.5",
+    "smtp-server": "^3.13.0",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.2",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
+  }
+}
