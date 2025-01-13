@@ -1,53 +1,37 @@
 # 📧 Bot Email Temporary Telegram
 
-```js
-console.log(`
-=========================
-   BOT EMAIL TEMPORARY
-   Bikin Email Dadakan
-     Lewat Telegram
-=========================
-`);
-```
+Bot Telegram untuk bikin dan terima email sementara. Tinggal chat bot di Telegram, langsung dapet email baru!
 
-Hai! 👋 
+## ✨ Fitur
 
-Kenalin nih bot yang bisa bantuin kamu bikin email sementara lewat Telegram. Gampang banget pakainya, tinggal chat bot di Telegram, langsung dapet email baru deh! 
+- ⚡ Bikin email baru secepat kilat
+- 📨 Terima email langsung di Telegram
+- 📎 Support file lampiran
+- 🔄 Ganti email kapan aja
+- 👥 Bisa dipake rame-rame
 
-## ✨ Apa aja yang bisa dilakuin?
+## 📱 Cara Pake
 
-```js
-// Fitur-fitur keren bot ini
-let fitur = [
-  "⚡ Bikin email baru dalam hitungan detik",
-  "📨 Terima email langsung di Telegram",
-  "📎 Bisa terima file lampiran",
-  "🔄 Email baru? Tinggal minta lagi!",
-  "👥 Bisa dipake bareng-bareng"
-];
-```
+Gampang banget pakainya! Ada 4 perintah aja:
 
-## 📱 Cara Pakainya
-
-Command bot yang bisa kamu pake:
-- `/start` - Mulai bot
+- `/start` - Mulai bot 
 - `/newmail` - Minta email baru
-- `/mymail` - Liat email yang lagi dipake
+- `/mymail` - Cek email yang lagi dipake
 - `/help` - Bantuan
 
-## 🔧 Mau Pasang Sendiri?
+## 🔧 Apa Aja Yang Dibutuhin
 
-Yang kamu butuhin:
-1. Node.js
-2. Domain
-3. Akun Cloudflare
-4. Bot Telegram
-5. Server
+Kalo mau pasang sendiri, siapin dulu:
+- Node.js
+- Domain
+- Akun Cloudflare
+- Bot Telegram
+- Server
 
 ## ⚙️ Cara Setting
 
-1. Bikin file `.env`, isinya:
-```env
+1. Bikin file `.env` isinya:
+```
 BOT_TOKEN=token_bot_telegram_kamu
 DOMAIN=domain.kamu.com
 SMTP_PORT=25
@@ -70,48 +54,35 @@ npm start
 
 ## 📝 Cara Kerja
 
-```js
-// Gampang kok cara kerjanya!
-let caraPake = [
-  "1. Kamu minta email baru ke bot",
-  "2. Bot bikinin email untukmu",
-  "3. Ada yang kirim email? Langsung masuk ke Telegram",
-  "4. Mau email baru? Tinggal minta lagi!"
-];
-```
+1. Kamu chat bot minta email baru
+2. Bot langsung bikinin email untukmu
+3. Kalo ada yang kirim email, langsung masuk ke Telegram
+4. Mau ganti email? Tinggal minta lagi!
 
-## ⚠️ Penting!
+## ⚠️ Penting Nih!
 
-```js
-console.log(`
-INGAT YA!
-- Ini cuma buat email sementara
-- Jangan buat yang penting-penting
-- Jangan buat data rahasia
-`);
-```
+- Ini cuma buat email sementara ya
+- Jangan dipake buat yang penting-penting
+- Jangan buat simpen data rahasia
 
-## 🤝 Mau Ikut Ngoding?
+## 🤝 Mau Bantuin Ngoding?
 
-Kamu programmer? Mau bantu ngembangkan bot ini? Ini caranya:
+Kalo kamu programmer dan mau bantu ngembangkan:
 1. Fork repo ini
 2. Bikin branch baru
-3. Coding deh
+3. Coding deh!
 4. Kirim Pull Request
 
 ## 💡 Butuh Bantuan?
 
-```js
-let bantuan = {
-  cara1: "Buka issue di GitHub",
-  cara2: "Jelasin masalahnya",
-  janji: "Kita bakal bantuin secepetnya!"
-};
-```
+Kalo ada masalah:
+- Buka issue di GitHub
+- Jelasin masalahnya
+- Kita bakal bantuin secepatnya!
 
 ## 🙏 Thanks To
 
-Bot ini pake bantuan dari:
+Project ini pake bantuan dari library:
 - node-telegram-bot-api
 - smtp-server
 - mailparser
@@ -120,4 +91,4 @@ Bot ini pake bantuan dari:
 
 ---
 
-Dibuat dengan ❤️ buat semua yang butuh email temporary!
+Dibuat dengan ❤️ buat yang butuh email dadakan!
