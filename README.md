@@ -1,95 +1,192 @@
 # 📧 Bot Email Temporary Telegram
 
-<img src="/api/placeholder/800/400" alt="Banner Bot Email Temporary"/>
+```javascript
+console.log(`
+╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
+│    BOT EMAIL TEMPORARY      │
+│      BY TELEGRAM           │
+│                            │
+│  "Email Sementara? Gampang │
+│   Pake Bot Telegram Aja!"  │
+╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+`);
+```
 
 Halo! Kenalin nih bot keren yang bisa bikin email temporary (email sementara) lewat Telegram. Jadi kamu bisa bikin email dadakan dan terima email langsung di chat Telegram kamu. Mantep kan? 😎
 
 ## ✨ Apa aja sih yang bisa dilakuin?
 
-<img src="/api/placeholder/400/300" alt="Fitur Bot"/>
+```javascript
+const fiturBot = {
+  bikinEmail: "⚡ Secepat Kilat",
+  terimaEmail: "📨 Langsung di Telegram",
+  support: "📎 Bisa kirim/terima file",
+  setupDNS: "🛠️ Auto setup pake Cloudflare",
+  antiError: "💪 Udah anti error",
+  multiUser: "👥 Bisa dipake rame-rame"
+};
 
-- Bikin email temporary secepat kilat ⚡
-- Terima email langsung di Telegram, gak perlu buka-buka app lain 📨
-- Support file attachment, jadi bisa terima file juga 📎
-- Setup DNS otomatis pakai Cloudflare, jadi gak ribet 🛠️
-- Ada sistem anti-error, jadi lebih reliable 💪
-- Bisa dipake bareng-bareng sama banyak user 👥
+Object.entries(fiturBot).forEach(([fitur, detail]) => {
+  console.log(`Fitur ${fitur}: ${detail}`);
+});
+```
 
 ## 🔧 Apa aja yang dibutuhin?
 
-- Node.js v14 ke atas
-- Domain yang udah didaftarin di Cloudflare
-- Punya akun Cloudflare yang bisa akses API
-- Token Bot Telegram
-- Server yang punya IP public
+```javascript
+const requirements = [
+  "Node.js v14 keatas",
+  "Domain di Cloudflare",
+  "Akun Cloudflare + API",
+  "Token Bot Telegram",
+  "Server + IP Public"
+].map(req => `✓ ${req}`);
+
+console.log("Checklist Kebutuhan:");
+requirements.forEach(req => console.log(req));
+```
 
 ## ⚙️ Cara Setting
 
-<img src="/api/placeholder/600/300" alt="Setup Guide"/>
+```javascript
+const setupGuide = async () => {
+  console.log("Step 1: Bikin file .env di root folder");
+  
+  const envFile = {
+    BOT_TOKEN: "token_bot_telegram_kamu",
+    DOMAIN: "domain.kamu.com",
+    SMTP_PORT: 25,
+    CLOUDFLARE_EMAIL: "email_kamu",
+    CLOUDFLARE_API_TOKEN: "token_kamu",
+    CLOUDFLARE_ZONE_ID: "zone_id_kamu",
+    CLOUDFLARE_ACCOUNT_ID: "account_id_kamu",
+    SERVER_IP: "ip_server_kamu"
+  };
 
-1. Bikin file `.env` di folder utama, isinya kayak gini:
+  console.log("\nIsi file .env:");
+  Object.entries(envFile).forEach(([key, value]) => {
+    console.log(`${key}=${value}`);
+  });
 
-```env
-BOT_TOKEN=token_bot_telegram_kamu
-DOMAIN=domain.kamu.com
-SMTP_PORT=25
-CLOUDFLARE_EMAIL=email_cloudflare_kamu
-CLOUDFLARE_API_TOKEN=token_api_cloudflare_kamu
-CLOUDFLARE_ZONE_ID=id_zone_cloudflare_kamu
-CLOUDFLARE_ACCOUNT_ID=id_akun_cloudflare_kamu
-SERVER_IP=ip_server_kamu
-```
+  console.log("\nStep 2: Install dependencies");
+  console.log("$ npm install");
+};
 
-2. Install yang dibutuhin:
-
-```bash
-npm install
+setupGuide();
 ```
 
 ## 🚀 Cara Pakainya
 
-1. Pastiin dulu semua setting di `.env` udah bener yaa
-2. Jalanin botnya:
-
-```bash
-npm start
+```javascript
+const mulaiBot = async () => {
+  try {
+    console.log("🔍 Ngecek konfigurasi...");
+    await checkConfig();
+    
+    console.log("✨ Konfigurasi OK!");
+    console.log("🚀 Menjalankan bot...");
+    console.log("🎉 Bot udah jalan! Coba kirim /start");
+  } catch (error) {
+    console.error("❌ Ups! Ada yang salah:", error.message);
+  }
+};
 ```
 
 ## 📱 Command Bot yang Bisa Dipake
 
-<img src="/api/placeholder/400/300" alt="Bot Commands"/>
+```javascript
+const commands = new Map([
+  ["/start", "Mulai bot + liat pesan welcome"],
+  ["/newmail", "Bikin email baru"],
+  ["/mymail", "Cek email yang aktif"],
+  ["/help", "Bantuan pake bot"]
+]);
 
-- `/start` - Mulai bot dan liat pesan selamat datang
-- `/newmail` - Bikin email baru
-- `/mymail` - Cek email yang lagi dipake sekarang
-- `/help` - Kalo butuh bantuan
+console.log("📝 Daftar Command Bot:");
+commands.forEach((desc, cmd) => {
+  console.log(`${cmd}: ${desc}`);
+});
+```
 
 ## 🛡️ Fitur Keamanan
 
-Bot ini udah dilengkapin sama:
-- Cek kredensial otomatis
-- Batasan ukuran email (25MB)
-- Sistem anti-error
-- Auto-cleaning pas di-shutdown
-- Sistem retry kalo gagal kirim pesan
+```javascript
+class SecurityFeatures {
+  constructor() {
+    this.features = {
+      verification: "✓ Auto verifikasi kredensial",
+      limitation: "✓ Max email size 25MB",
+      errorHandling: "✓ Anti error system",
+      autoClean: "✓ Auto cleaning",
+      retry: "✓ Auto retry kalo gagal"
+    };
+  }
+
+  showFeatures() {
+    console.log("🔒 Fitur Keamanan Bot:");
+    Object.values(this.features)
+      .forEach(feature => console.log(feature));
+  }
+}
+
+new SecurityFeatures().showFeatures();
+```
 
 ## 🔍 Gimana Cara Kerjanya?
 
-<img src="/api/placeholder/600/400" alt="How It Works"/>
+```javascript
+async function caraBotBekerja() {
+  const steps = [
+    "📧 User minta email baru",
+    "🎲 Bot bikin email random",
+    "📬 Server SMTP terima email",
+    "🔄 Email diproses",
+    "📱 Dikirim ke Telegram user"
+  ];
 
-1. Bot bikin email random pas kamu minta
-2. Server SMTP nerima email yang masuk
-3. Email diproses terus dikirim ke chat Telegram kamu
-4. File attachment dikirim sebagai dokumen di Telegram
-5. DNS diatur otomatis pake API Cloudflare
+  console.log("Alur Kerja Bot:");
+  for (const [index, step] of steps.entries()) {
+    await new Promise(r => setTimeout(r, 500));
+    console.log(`Step ${index + 1}: ${step}`);
+  }
+}
+```
 
 ## ⚠️ Kalo Error Gimana?
 
-Tenang! Bot ini udah dibikin anti-error:
-- Auto-retry kalo gagal kirim pesan
-- Auto-recovery kalo polling gagal
-- Cleaning yang aman kalo error parah
-- Ada log lengkap buat debugging
+```javascript
+class ErrorHandler {
+  static handle(error) {
+    const solutions = {
+      TELEGRAM_ERROR: "🔄 Auto retry kirim pesan",
+      POLLING_ERROR: "🔄 Auto recovery polling",
+      FATAL_ERROR: "🧹 Safe cleanup",
+      ANY_ERROR: "📝 Full logging buat debug"
+    };
+
+    console.log("Cara Handle Error:");
+    Object.values(solutions)
+      .forEach(solution => console.log(solution));
+  }
+}
+```
+
+## 🤝 Mau Bantu Ngoding?
+
+```javascript
+const kontribusi = async () => {
+  const steps = [
+    "🍴 Fork repo ini",
+    "🌿 Bikin branch: git checkout -b fitur-keren",
+    "💾 Commit: git commit -m 'Nambahin fitur keren'",
+    "⬆️ Push: git push origin fitur-keren",
+    "🎯 Bikin Pull Request"
+  ];
+
+  console.log("Cara Kontribusi:");
+  steps.forEach(step => console.log(step));
+};
+```
 
 ## 📄 Lisensi
 
@@ -97,19 +194,51 @@ Project ini pake Lisensi MIT - cek [LICENSE](LICENSE) buat lengkapnya.
 
 ## 🙏 Thanks To
 
-Bot ini pake library keren ini:
-- node-telegram-bot-api
-- smtp-server
-- mailparser
-- axios
-- dotenv
+```javascript
+const credits = {
+  mainLibraries: [
+    "node-telegram-bot-api",
+    "smtp-server",
+    "mailparser",
+    "axios",
+    "dotenv"
+  ]
+};
+
+console.log("🙏 Terima kasih buat library keren ini:");
+credits.mainLibraries.forEach(lib => console.log(`- ${lib}`));
+```
 
 ## ⚠️ Penting Nih!
 
-Bot ini dibuat buat keperluan temporary aja ya, jadi jangan dipake buat email yang penting-penting atau rahasia. Pake yang bijak ya! 😉
+```javascript
+console.warn(`
+⚠️ PERHATIAN:
+Bot ini cuma buat email temporary!
+Jangan dipake buat:
+- Email penting
+- Data sensitif
+- Informasi rahasia
+
+Pake yang bijak ya! 😉
+`);
+```
 
 ## 💬 Butuh Bantuan?
 
-<img src="/api/placeholder/400/300" alt="Support"/>
+```javascript
+const support = () => {
+  console.log(`
+  💡 Ada masalah? Butuh bantuan?
+  
+  Cara dapet bantuan:
+  1. Buka issue di GitHub
+  2. Jelasin masalahnya
+  3. Tim kita bakal bantuin
+  
+  Kita usahain bales secepetnya! 🚀
+  `);
+};
 
-Kalo ada masalah atau mau nanya-nanya, langsung aja bikin issue di repo ini ya! Kita bakal bantuin sebisa mungkin 🙌
+support();
+```
