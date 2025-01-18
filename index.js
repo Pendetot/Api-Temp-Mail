@@ -4,8 +4,8 @@ const SMTPServer = require('smtp-server').SMTPServer;
 const simpleParser = require('mailparser').simpleParser;
 const crypto = require('crypto');
 const CloudflareManager = require('./cloudflare');
+const getServerIP = require('./ip');
 
-// Validasi environment variables
 const requiredEnvVars = [
     'BOT_TOKEN',
     'DOMAIN',
@@ -13,13 +13,11 @@ const requiredEnvVars = [
     'CLOUDFLARE_EMAIL',
     'CLOUDFLARE_API_TOKEN',
     'CLOUDFLARE_ZONE_ID',
-    'CLOUDFLARE_ACCOUNT_ID',
-    'SERVER_IP'
+    'CLOUDFLARE_ACCOUNT_ID'
 ];
 
 for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
-        console.error(`Error: Environment variable ${envVar} tidak ditemukan`);
         process.exit(1);
     }
 }
@@ -30,10 +28,9 @@ const cloudflare = new CloudflareManager();
 
 async function setupDomain() {
     try {
-        console.log('Memulai setup domain di Cloudflare...');
-        await cloudflare.setupDNSRecords(process.env.DOMAIN, process.env.SERVER_IP);
+        const serverIP = await getServerIP();
+        await cloudflare.setupDNSRecords(process.env.DOMAIN, serverIP);
         
-        console.log('Menunggu propagasi DNS...');
         let configured = false;
         let attempts = 0;
         
@@ -41,19 +38,12 @@ async function setupDomain() {
             const status = await cloudflare.checkDNSPropagation(process.env.DOMAIN);
             if (status.mxConfigured && status.spfConfigured) {
                 configured = true;
-                console.log('DNS telah terkonfigurasi dengan benar');
             } else {
                 attempts++;
-                console.log(`Menunggu propagasi DNS... Percobaan ${attempts}/10`);
                 await new Promise(resolve => setTimeout(resolve, 30000));
             }
         }
-        
-        if (!configured) {
-            console.log('Peringatan: DNS belum sepenuhnya terpropagasi');
-        }
     } catch (error) {
-        console.error('Error dalam setup domain:', error);
         throw error;
     }
 }
@@ -78,19 +68,15 @@ let pollingErrorCount = 0;
 const MAX_POLLING_ERRORS = 5;
 
 bot.on('polling_error', async (error) => {
-    console.error('Bot polling error:', error.code || error.message);
     pollingErrorCount++;
 
     if (pollingErrorCount >= MAX_POLLING_ERRORS) {
-        console.log('Terlalu banyak error polling, mencoba restart bot...');
         try {
             await bot.stopPolling();
             await new Promise(resolve => setTimeout(resolve, 10000));
             await bot.startPolling();
             pollingErrorCount = 0;
-            console.log('Bot berhasil direstart');
         } catch (restartError) {
-            console.error('Gagal restart bot:', restartError);
             process.exit(1);
         }
     } else {
@@ -109,7 +95,6 @@ async function sendTelegramMessage(chatId, message, options = {}) {
             await bot.sendMessage(chatId, message, mergedOptions);
             return;
         } catch (error) {
-            console.error(`Error mengirim pesan (${retries} percobaan tersisa):`, error.code || error.message);
             retries--;
             if (retries > 0) {
                 if (error.code === 'ETELEGRAM' && options.parse_mode) {
@@ -135,13 +120,7 @@ const serverSMTP = new SMTPServer({
     disabledCommands: ['AUTH'],
     size: 25 * 1024 * 1024,
     onConnect(session, callback) {
-        try {
-            console.log('Koneksi SMTP baru dari:', session.remoteAddress);
-            callback();
-        } catch (error) {
-            console.error('Error pada koneksi SMTP:', error);
-            callback();
-        }
+        callback();
     },
     onData(stream, session, callback) {
         let chunks = [];
@@ -190,32 +169,21 @@ const serverSMTP = new SMTPServer({
                                         caption: `📎 File: ${lampiran.filename}`
                                     });
                                 } catch (error) {
-                                    console.error('Error mengirim lampiran:', error);
                                     await sendTelegramMessage(chatId, 
                                         `❌ Maaf, gagal mengirim file "${lampiran.filename}". File mungkin terlalu besar atau tidak didukung.`
                                     );
                                 }
                             }
                         }
-                    } catch (error) {
-                        console.error('Error mengirim pesan:', error);
-                    }
-                } else {
-                    console.log('Email diterima untuk alamat yang tidak terdaftar:', emailTujuan);
+                    } catch (error) {}
                 }
-            } catch (error) {
-                console.error('Error memproses email:', error);
-            }
+            } catch (error) {}
             callback();
         });
 
         stream.on('error', (error) => {
-            console.error('Error pada stream email:', error);
             callback(error);
         });
-    },
-    onError(error) {
-        console.error('SMTP Error:', error);
     }
 });
 
@@ -233,9 +201,7 @@ bot.onText(/\/start/, async (msg) => {
             `❓ /help - Kalau kamu butuh bantuan\n\n` +
             `Mau langsung bikin email? Ketik /newmail aja! 😊`
         );
-    } catch (error) {
-        console.error('Error di command start:', error);
-    }
+    } catch (error) {}
 });
 
 bot.onText(/\/newmail/, async (msg) => {
@@ -259,7 +225,6 @@ bot.onText(/\/newmail/, async (msg) => {
             `Oh iya, kalau butuh email baru lagi, tinggal ketik /newmail aja ya!`
         );
     } catch (error) {
-        console.error('Error membuat email baru:', error);
         await sendTelegramMessage(chatId,
             `Maaf ${nama}, ada masalah saat membuat email baru. Coba lagi dalam beberapa saat ya!`
         );
@@ -288,7 +253,6 @@ bot.onText(/\/mymail/, async (msg) => {
             );
         }
     } catch (error) {
-        console.error('Error mengecek email:', error);
         await sendTelegramMessage(chatId,
             `Maaf ${nama}, ada masalah saat mengecek email kamu. Coba lagi dalam beberapa saat ya!`
         );
@@ -315,7 +279,6 @@ bot.onText(/\/help/, async (msg) => {
             `Ada yang masih bingung? Jangan ragu buat tanya ke aku ya! 😊`
         );
     } catch (error) {
-        console.error('Error mengirim pesan bantuan:', error);
         await sendTelegramMessage(chatId,
             `Maaf ${nama}, ada masalah saat menampilkan bantuan. Coba lagi dalam beberapa saat ya!`
         );
@@ -324,58 +287,43 @@ bot.onText(/\/help/, async (msg) => {
 
 async function startServer() {
     try {
-        console.log('Memulai server...');
         await setupDomain();
         
-        serverSMTP.listen(process.env.SMTP_PORT, () => {
-            console.log(`Server SMTP berjalan di port ${process.env.SMTP_PORT}`);
-        });
-        
-        console.log('Bot sedang berjalan...');
+        serverSMTP.listen(process.env.SMTP_PORT, () => {});
     } catch (error) {
-        console.error('Error saat memulai server:', error);
         process.exit(1);
     }
 }
 
 process.on('SIGTERM', () => {
-    console.log('Menerima SIGTERM. Membersihkan...');
     cleanup();
 });
 
 process.on('SIGINT', () => {
-    console.log('Menerima SIGINT. Membersihkan...');
     cleanup();
 });
 
 async function cleanup() {
-    console.log('Membersihkan dan menutup koneksi...');
     try {
         await bot.stopPolling();
-        console.log('Bot polling dihentikan');
         
         await new Promise((resolve) => {
             serverSMTP.close(() => {
-                console.log('Server SMTP ditutup');
                 resolve();
             });
         });
         
-        console.log('Cleanup selesai');
         process.exit(0);
     } catch (error) {
-        console.error('Error saat cleanup:', error);
         process.exit(1);
     }
 }
 
 process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
     cleanup();
 });
 
 process.on('unhandledRejection', (error) => {
-    console.error('Unhandled Rejection:', error);
     cleanup();
 });
 
