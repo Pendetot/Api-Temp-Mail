@@ -2,9 +2,9 @@
   "name": "Pendetot Telegram Temp Mail",
   "version": "1.0.0",
   "description": "Bot Telegram untuk layanan email sementara",
-  "main": "index.js",
+  "main": "setup.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node setup.js"
   },
   "dependencies": {
     "node-telegram-bot-api": "0.61.0",
