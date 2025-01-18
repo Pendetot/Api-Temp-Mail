@@ -9,11 +9,12 @@ Bot Telegram untuk bikin dan terima email sementara. Tinggal chat bot di Telegra
 - 📎 Support file lampiran
 - 🔄 Ganti email kapan aja
 - 👥 Bisa dipake rame-rame
+- 🔍 Auto deteksi IP server
+- 🛡️ Setup DNS otomatis
 
 ## 📱 Cara Pake
 
 Gampang banget pakainya! Ada 4 perintah aja:
-
 - `/start` - Mulai bot 
 - `/newmail` - Minta email baru
 - `/mymail` - Cek email yang lagi dipake
@@ -23,23 +24,16 @@ Gampang banget pakainya! Ada 4 perintah aja:
 
 Kalo mau pasang sendiri, siapin dulu:
 - Node.js
-- Domain
+- Domain yang udah terdaftar di Cloudflare
 - Akun Cloudflare
-- Bot Telegram
-- Server
+- Bot Telegram (bikin di @BotFather)
+- VPS/Server (yang support port 25)
 
 ## ⚙️ Cara Setting
 
-1. Bikin file `.env` isinya:
-```
-BOT_TOKEN=token_bot_telegram_kamu
-DOMAIN=domain.kamu.com
-SMTP_PORT=25
-CLOUDFLARE_EMAIL=email_kamu
-CLOUDFLARE_API_TOKEN=token_kamu
-CLOUDFLARE_ZONE_ID=zone_id_kamu
-CLOUDFLARE_ACCOUNT_ID=account_id_kamu
-SERVER_IP=ip_server_kamu
+1. Clone repository ini
+```bash
+git clone https://github.com/Pendetot/Tele-Temp-Mail
 ```
 
 2. Install yang dibutuhin:
@@ -47,23 +41,48 @@ SERVER_IP=ip_server_kamu
 npm install
 ```
 
-3. Jalanin botnya:
+3. Jalanin setup:
 ```bash
 npm start
 ```
 
+4. Ikutin petunjuk setup untuk masukin:
+- Token Bot Telegram
+- Domain
+- Port SMTP (default: 25)
+- Email Cloudflare
+- API Token Cloudflare
+- Zone ID Cloudflare
+- Account ID Cloudflare
+
 ## 📝 Cara Kerja
 
-1. Kamu chat bot minta email baru
-2. Bot langsung bikinin email untukmu
-3. Kalo ada yang kirim email, langsung masuk ke Telegram
-4. Mau ganti email? Tinggal minta lagi!
+1. Setup Otomatis:
+   - Deteksi IP server otomatis
+   - Konfigurasi DNS di Cloudflare
+   - Setup MX dan SPF records
+
+2. Penggunaan:
+   - Chat bot untuk minta email baru
+   - Bot langsung bikinin email untukmu
+   - Terima email langsung di Telegram
+   - Support lampiran file
+   - Ganti email kapan aja
 
 ## ⚠️ Penting Nih!
 
 - Ini cuma buat email sementara ya
 - Jangan dipake buat yang penting-penting
 - Jangan buat simpen data rahasia
+- Pastikan server support SMTP port 25
+- Backup file .env kalo udah dibuat
+
+## 🗂️ Struktur File
+
+- `setup.js` - Untuk setup awal dan konfigurasi
+- `index.js` - File utama bot dan server SMTP
+- `ip.js` - Untuk deteksi IP server
+- `cloudflare.js` - Manajemen DNS Cloudflare
 
 ## 🤝 Mau Bantuin Ngoding?
 
@@ -83,12 +102,12 @@ Kalo ada masalah:
 ## 🙏 Thanks To
 
 Project ini pake bantuan dari library:
-- node-telegram-bot-api
-- smtp-server
-- mailparser
-- axios
-- dotenv
+- node-telegram-bot-api - Untuk bot Telegram
+- smtp-server - Untuk terima email
+- mailparser - Untuk parse email
+- axios - Untuk API requests
+- dotenv - Untuk environment variables
+- crypto - Untuk generate random email
 
 ---
-
 Dibuat dengan ❤️ buat yang butuh email dadakan!
