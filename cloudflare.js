@@ -12,39 +12,27 @@ class CloudflareManager {
             'X-Auth-Key': process.env.CLOUDFLARE_API_TOKEN,
             'Content-Type': 'application/json'
         };
-
-        console.log('Konfigurasi Cloudflare:');
-        console.log('Email:', process.env.CLOUDFLARE_EMAIL);
-        console.log('Zone ID:', process.env.CLOUDFLARE_ZONE_ID);
-        console.log('Account ID:', process.env.CLOUDFLARE_ACCOUNT_ID);
     }
 
     async verifyCredentials() {
         try {
-            console.log('Memverifikasi kredensial Cloudflare...');
             const response = await axios.get(
                 `${this.baseUrl}/zones/${this.zoneId}`,
                 { headers: this.headers }
             );
             
             if (response.data.success) {
-                console.log('Verifikasi kredensial berhasil');
                 return true;
             } else {
-                console.error('Verifikasi gagal:', response.data);
                 return false;
             }
         } catch (error) {
-            console.error('Error verifikasi:', error.response?.data || error.message);
             return false;
         }
     }
 
     async setupDNSRecords(domain, serverIp) {
         try {
-            console.log(`Setup DNS records untuk domain: ${domain}`);
-            console.log(`IP Server: ${serverIp}`);
-
             const isVerified = await this.verifyCredentials();
             if (!isVerified) {
                 throw new Error('Gagal verifikasi kredensial Cloudflare');
@@ -79,56 +67,42 @@ class CloudflareManager {
                 proxied: false
             });
 
-            console.log('Setup DNS records berhasil');
             return true;
         } catch (error) {
-            console.error('Error setup DNS records:', error.message);
-            if (error.response) {
-                console.error('Response Cloudflare:', error.response.data);
-            }
             throw error;
         }
     }
 
     async createDNSRecord(record) {
         try {
-            console.log(`Membuat record ${record.type}...`);
             const response = await axios.post(
                 `${this.baseUrl}/zones/${this.zoneId}/dns_records`,
                 record,
                 { headers: this.headers }
             );
-            console.log(`Record ${record.type} berhasil dibuat`);
             return response.data;
         } catch (error) {
-            console.error(`Error membuat record ${record.type}:`, error.response?.data || error.message);
             throw error;
         }
     }
 
     async deleteDNSRecord(recordId) {
         try {
-            console.log(`Menghapus record ID: ${recordId}`);
             await axios.delete(
                 `${this.baseUrl}/zones/${this.zoneId}/dns_records/${recordId}`,
                 { headers: this.headers }
             );
-            console.log('Record berhasil dihapus');
-        } catch (error) {
-            console.error('Error menghapus record:', error.response?.data || error.message);
-        }
+        } catch (error) {}
     }
 
     async getDNSRecords() {
         try {
-            console.log('Mengambil daftar DNS records...');
             const response = await axios.get(
                 `${this.baseUrl}/zones/${this.zoneId}/dns_records`,
                 { headers: this.headers }
             );
             return response.data.result || [];
         } catch (error) {
-            console.error('Error mengambil DNS records:', error.response?.data || error.message);
             throw error;
         }
     }
@@ -144,7 +118,6 @@ class CloudflareManager {
                 spfConfigured: !!spfRecord
             };
         } catch (error) {
-            console.error('Error memeriksa propagasi DNS:', error.message);
             return {
                 mxConfigured: false,
                 spfConfigured: false
