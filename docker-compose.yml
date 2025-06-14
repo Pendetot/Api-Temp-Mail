@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  temp-mail-api:
+    build: .
+    ports:
+      - "8080:8080"
+      - "25:25"
+    environment:
+      - PORT=8080
+      - DOMAIN=${DOMAIN}
+      - SMTP_PORT=25
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - CLOUDFLARE_ZONE_ID=${CLOUDFLARE_ZONE_ID}
+      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+      - SERVER_IP=${SERVER_IP}
+    restart: unless-stopped
+    volumes:
+      - ./.env:/root/.env:ro
+    networks:
+      - temp-mail-network
+
+networks:
+  temp-mail-network:
+    driver: bridge

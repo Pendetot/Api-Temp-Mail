@@ -1,113 +1,326 @@
-# 📧 Bot Email Temporary Telegram
+# 📧 REST API Email Sementara
 
-Bot Telegram untuk bikin dan terima email sementara. Tinggal chat bot di Telegram, langsung dapet email baru!
+REST API untuk layanan email sementara yang dibangun dengan Golang. API ini memungkinkan Anda membuat email sementara, menerima pesan, dan mengelola email melalui HTTP endpoints.
 
 ## ✨ Fitur
 
-- ⚡ Bikin email baru secepat kilat
-- 📨 Terima email langsung di Telegram
-- 📎 Support file lampiran
-- 🔄 Ganti email kapan aja
-- 👥 Bisa dipake rame-rame
-- 🔍 Auto deteksi IP server
-- 🛡️ Setup DNS otomatis
+- 🚀 **REST API** - Interface HTTP yang mudah digunakan
+- ⚡ **Performa Tinggi** - Dibangun dengan Golang untuk kecepatan optimal
+- 📨 **Terima Email Real-time** - Server SMTP terintegrasi
+- 📎 **Support Lampiran** - Mendukung file attachment
+- 🔄 **Auto Cleanup** - Email otomatis terhapus setelah expired
+- 👥 **Multi-user** - Mendukung banyak pengguna secara bersamaan
+- 🔍 **Auto IP Detection** - Deteksi IP server otomatis
+- 🛡️ **Setup DNS Otomatis** - Konfigurasi Cloudflare otomatis
+- 🐳 **Docker Ready** - Mudah deploy dengan Docker
 
-## 📱 Cara Pake
+## 📱 API Endpoints
 
-Gampang banget pakainya! Ada 4 perintah aja:
-- `/start` - Mulai bot 
-- `/newmail` - Minta email baru
-- `/mymail` - Cek email yang lagi dipake
-- `/help` - Bantuan
-
-## 🔧 Apa Aja Yang Dibutuhin
-
-Kalo mau pasang sendiri, siapin dulu:
-- Node.js
-- Domain yang udah terdaftar di Cloudflare
-- Akun Cloudflare
-- Bot Telegram (bikin di @BotFather)
-- VPS/Server (yang support port 25)
-
-## ⚙️ Cara Setting
-
-1. Clone repository ini
-```bash
-git clone https://github.com/Pendetot/Tele-Temp-Mail
+### 1. Health Check
+```http
+GET /api/v1/health
 ```
 
-2. Install yang dibutuhin:
-```bash
-npm install
+**Response:**
+```json
+{
+  "status": "healthy",
+  "message": "Layanan REST API Email Sementara berjalan normal",
+  "timestamp": "2024-01-01T12:00:00Z",
+  "version": "1.0.0"
+}
 ```
 
-3. Jalanin setup:
-```bash
-npm start
+### 2. Buat Email Sementara
+```http
+POST /api/v1/email
+Content-Type: application/json
+
+{
+  "domain": "example.com",
+  "ttl": 60
+}
 ```
 
-4. Ikutin petunjuk setup untuk masukin:
-- Token Bot Telegram
-- Domain
-- Port SMTP (default: 25)
-- Email Cloudflare
-- API Token Cloudflare
-- Zone ID Cloudflare
-- Account ID Cloudflare
+**Response:**
+```json
+{
+  "email": {
+    "id": "uuid-email-id",
+    "address": "random123@example.com",
+    "domain": "example.com",
+    "created_at": "2024-01-01T12:00:00Z",
+    "expires_at": "2024-01-01T13:00:00Z"
+  },
+  "message": "Email sementara berhasil dibuat"
+}
+```
+
+### 3. Ambil Detail Email
+```http
+GET /api/v1/email/{id}
+```
+
+**Response:**
+```json
+{
+  "id": "uuid-email-id",
+  "address": "random123@example.com",
+  "domain": "example.com",
+  "created_at": "2024-01-01T12:00:00Z",
+  "expires_at": "2024-01-01T13:00:00Z",
+  "messages": []
+}
+```
+
+### 4. Ambil Pesan Email
+```http
+GET /api/v1/email/{id}/messages?page=1&limit=10
+```
+
+**Response:**
+```json
+{
+  "messages": [
+    {
+      "id": "uuid-message-id",
+      "email_id": "uuid-email-id",
+      "from": "sender@example.com",
+      "to": "random123@example.com",
+      "subject": "Test Email",
+      "body": "Isi pesan email",
+      "html": "<p>Isi pesan email</p>",
+      "attachments": [],
+      "headers": {},
+      "received_at": "2024-01-01T12:30:00Z"
+    }
+  ],
+  "total": 1,
+  "page": 1,
+  "limit": 10
+}
+```
+
+### 5. Hapus Email
+```http
+DELETE /api/v1/email/{id}
+```
+
+**Response:**
+```json
+{
+  "message": "Email berhasil dihapus"
+}
+```
+
+## 🔧 Kebutuhan Sistem
+
+- **Go 1.21+** - Bahasa pemrograman
+- **Domain** - Terdaftar di Cloudflare
+- **Akun Cloudflare** - Untuk manajemen DNS
+- **VPS/Server** - Yang mendukung port 25 (SMTP)
+
+## ⚙️ Instalasi & Setup
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/username/tele-temp-mail.git
+cd tele-temp-mail
+```
+
+### 2. Konfigurasi Environment
+```bash
+cp .env.example .env
+nano .env
+```
+
+Isi file `.env` dengan konfigurasi Anda:
+```env
+DOMAIN=your-domain.com
+SMTP_PORT=25
+PORT=8080
+CLOUDFLARE_EMAIL=your-email@example.com
+CLOUDFLARE_API_TOKEN=your-api-token
+CLOUDFLARE_ZONE_ID=your-zone-id
+CLOUDFLARE_ACCOUNT_ID=your-account-id
+```
+
+### 3. Install Dependencies
+```bash
+go mod download
+```
+
+### 4. Build & Run
+```bash
+# Build aplikasi
+go build -o temp-mail-api ./cmd/api
+
+# Jalankan aplikasi
+./temp-mail-api
+```
+
+## 🐳 Deploy dengan Docker
+
+### 1. Build & Run dengan Docker Compose
+```bash
+docker-compose up -d
+```
+
+### 2. Build Manual
+```bash
+# Build image
+docker build -t temp-mail-api .
+
+# Run container
+docker run -d \
+  --name temp-mail-api \
+  -p 8080:8080 \
+  -p 25:25 \
+  --env-file .env \
+  temp-mail-api
+```
 
 ## 📝 Cara Kerja
 
-1. Setup Otomatis:
+1. **Setup Otomatis:**
    - Deteksi IP server otomatis
-   - Konfigurasi DNS di Cloudflare
-   - Setup MX dan SPF records
+   - Konfigurasi DNS di Cloudflare (MX, A, SPF records)
+   - Setup server SMTP dan HTTP API
 
-2. Penggunaan:
-   - Chat bot untuk minta email baru
-   - Bot langsung bikinin email untukmu
-   - Terima email langsung di Telegram
-   - Support lampiran file
-   - Ganti email kapan aja
+2. **Penggunaan API:**
+   - Kirim POST request untuk membuat email baru
+   - Gunakan GET request untuk mengambil pesan
+   - Email otomatis expired sesuai TTL yang ditentukan
 
-## ⚠️ Penting Nih!
+3. **Penerimaan Email:**
+   - Server SMTP menerima email masuk
+   - Email diparsing dan disimpan dalam memori
+   - Dapat diakses melalui API endpoints
 
-- Ini cuma buat email sementara ya
-- Jangan dipake buat yang penting-penting
-- Jangan buat simpen data rahasia
-- Pastikan server support SMTP port 25
-- Backup file .env kalo udah dibuat
+## 🗂️ Struktur Project
 
-## 🗂️ Struktur File
+```
+├── cmd/api/              # Entry point aplikasi
+│   └── main.go
+├── internal/             # Kode internal aplikasi
+│   ├── config/          # Konfigurasi
+│   ├── handlers/        # HTTP handlers
+│   ├── models/          # Data models
+│   └── services/        # Business logic
+├── pkg/                 # Package yang dapat digunakan ulang
+│   ├── cloudflare/      # Cloudflare API client
+│   └── utils/           # Utility functions
+├── Dockerfile           # Docker configuration
+├── docker-compose.yml   # Docker Compose configuration
+├── go.mod              # Go modules
+└── README.md           # Dokumentasi
+```
 
-- `setup.js` - Untuk setup awal dan konfigurasi
-- `index.js` - File utama bot dan server SMTP
-- `ip.js` - Untuk deteksi IP server
-- `cloudflare.js` - Manajemen DNS Cloudflare
+## 🔒 Keamanan
 
-## 🤝 Mau Bantuin Ngoding?
+- ⚠️ **Hanya untuk email sementara** - Jangan gunakan untuk data penting
+- 🔐 **Tidak ada enkripsi** - Email disimpan dalam plain text
+- ⏰ **Auto-expire** - Email otomatis terhapus setelah TTL habis
+- 🚫 **Tidak ada autentikasi** - API terbuka untuk semua
 
-Kalo kamu programmer dan mau bantu ngembangkan:
-1. Fork repo ini
-2. Bikin branch baru
-3. Coding deh!
-4. Kirim Pull Request
+## 📊 Monitoring
 
-## 💡 Butuh Bantuan?
+### Health Check
+```bash
+curl http://localhost:8080/api/v1/health
+```
 
-Kalo ada masalah:
-- Buka issue di GitHub
-- Jelasin masalahnya
-- Kita bakal bantuin secepatnya!
+### Logs
+```bash
+# Lihat logs Docker
+docker-compose logs -f temp-mail-api
 
-## 🙏 Thanks To
+# Lihat logs aplikasi langsung
+./temp-mail-api
+```
 
-Project ini pake bantuan dari library:
-- node-telegram-bot-api - Untuk bot Telegram
-- smtp-server - Untuk terima email
-- mailparser - Untuk parse email
-- axios - Untuk API requests
-- dotenv - Untuk environment variables
-- crypto - Untuk generate random email
+## 🛠️ Development
+
+### Menjalankan dalam Mode Development
+```bash
+# Install air untuk hot reload
+go install github.com/cosmtrek/air@latest
+
+# Jalankan dengan hot reload
+air
+```
+
+### Testing
+```bash
+# Run tests
+go test ./...
+
+# Test dengan coverage
+go test -cover ./...
+```
+
+## 🤝 Kontribusi
+
+Kami menerima kontribusi dari developer lain:
+
+1. Fork repository ini
+2. Buat branch fitur baru (`git checkout -b feature/amazing-feature`)
+3. Commit perubahan (`git commit -m 'Add amazing feature'`)
+4. Push ke branch (`git push origin feature/amazing-feature`)
+5. Buat Pull Request
+
+## 📋 TODO
+
+- [ ] Implementasi database untuk persistensi
+- [ ] Autentikasi API dengan JWT
+- [ ] Rate limiting
+- [ ] Webhook notifications
+- [ ] Web interface
+- [ ] Email templates
+- [ ] Metrics dan monitoring
+
+## 💡 Troubleshooting
+
+### Port 25 Blocked
+Jika port 25 diblokir oleh provider:
+```bash
+# Gunakan port alternatif
+SMTP_PORT=587
+```
+
+### DNS Tidak Terpropagasi
+```bash
+# Cek DNS records
+dig MX your-domain.com
+dig TXT your-domain.com
+```
+
+### Memory Usage Tinggi
+```bash
+# Kurangi TTL default email
+# Edit di internal/services/email.go
+ttl = 30 // 30 menit instead of 60
+```
+
+## 📞 Support
+
+Jika mengalami masalah:
+- 🐛 **Bug Reports**: Buka issue di GitHub
+- 💬 **Diskusi**: Gunakan GitHub Discussions
+- 📧 **Email**: Kirim ke support@example.com
+
+## 📄 Lisensi
+
+Project ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detail lengkap.
+
+## 🙏 Acknowledgments
+
+Terima kasih kepada:
+- **Gin Framework** - HTTP web framework
+- **go-smtp** - SMTP server implementation
+- **Cloudflare** - DNS management
+- **Docker** - Containerization
 
 ---
-Dibuat dengan ❤️ buat yang butuh email dadakan!
+
+**Dibuat dengan ❤️ menggunakan Golang untuk kebutuhan email sementara yang cepat dan reliable!**
