@@ -124,8 +124,8 @@ DELETE /api/v1/email/{id}
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/Pendetot/tele-temp-mail.git
-cd tele-temp-mail
+git clone https://github.com/Pendetot/Api-Temp-Mail.git
+cd Api-Temp-Mail
 ```
 
 ### 2. Konfigurasi Environment
