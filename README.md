@@ -26,7 +26,7 @@ GET /api/v1/health
 {
   "status": "healthy",
   "message": "Layanan REST API Email Sementara berjalan normal",
-  "timestamp": "2024-01-01T12:00:00Z",
+  "timestamp": "2025-07-14T12:00:00Z",
   "version": "1.0.0"
 }
 ```
@@ -49,8 +49,8 @@ Content-Type: application/json
     "id": "uuid-email-id",
     "address": "random123@example.com",
     "domain": "example.com",
-    "created_at": "2024-01-01T12:00:00Z",
-    "expires_at": "2024-01-01T13:00:00Z"
+    "created_at": "2025-07-14T12:00:00Z",
+    "expires_at": "2025-07-14T13:00:00Z"
   },
   "message": "Email sementara berhasil dibuat"
 }
@@ -67,8 +67,8 @@ GET /api/v1/email/{id}
   "id": "uuid-email-id",
   "address": "random123@example.com",
   "domain": "example.com",
-  "created_at": "2024-01-01T12:00:00Z",
-  "expires_at": "2024-01-01T13:00:00Z",
+  "created_at": "2025-07-14T12:00:00Z",
+  "expires_at": "2025-07-14T13:00:00Z",
   "messages": []
 }
 ```
@@ -92,7 +92,7 @@ GET /api/v1/email/{id}/messages?page=1&limit=10
       "html": "<p>Isi pesan email</p>",
       "attachments": [],
       "headers": {},
-      "received_at": "2024-01-01T12:30:00Z"
+      "received_at": "2025-07-14T12:30:00Z"
     }
   ],
   "total": 1,
