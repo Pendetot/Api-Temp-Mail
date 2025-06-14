@@ -68,8 +68,16 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("Server starting on 0.0.0.0:%s", port)
-	if err := router.Run("0.0.0.0:" + port); err != nil {
+	// Use SERVER_IP if configured, otherwise bind to all interfaces
+	var addr string
+	if cfg.ServerIP != "" {
+		addr = cfg.ServerIP + ":" + port
+	} else {
+		addr = "0.0.0.0:" + port
+	}
+
+	log.Printf("Server starting on %s", addr)
+	if err := router.Run(addr); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

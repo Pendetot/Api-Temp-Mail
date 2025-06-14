@@ -32,11 +32,19 @@ func (s *SMTPService) Start() error {
 		domain:       s.config.Domain,
 	})
 
-	s.server.Addr = fmt.Sprintf(":%d", s.config.SMTPPort)
+	// Use SERVER_IP if configured, otherwise bind to all interfaces
+	var addr string
+	if s.config.ServerIP != "" {
+		addr = fmt.Sprintf("%s:%d", s.config.ServerIP, s.config.SMTPPort)
+	} else {
+		addr = fmt.Sprintf("0.0.0.0:%d", s.config.SMTPPort)
+	}
+	
+	s.server.Addr = addr
 	s.server.Domain = s.config.Domain
 	s.server.AllowInsecureAuth = true
 
-	log.Printf("Starting SMTP server on port %d", s.config.SMTPPort)
+	log.Printf("Starting SMTP server on %s", addr)
 	return s.server.ListenAndServe()
 }
 
