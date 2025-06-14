@@ -124,7 +124,7 @@ DELETE /api/v1/email/{id}
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/username/tele-temp-mail.git
+git clone https://github.com/Pendetot/tele-temp-mail.git
 cd tele-temp-mail
 ```
 
@@ -307,7 +307,7 @@ ttl = 30 // 30 menit instead of 60
 Jika mengalami masalah:
 - 🐛 **Bug Reports**: Buka issue di GitHub
 - 💬 **Diskusi**: Gunakan GitHub Discussions
-- 📧 **Email**: Kirim ke support@example.com
+-  **Instagram**: Dm Aol_Ra
 
 ## 📄 Lisensi
 
