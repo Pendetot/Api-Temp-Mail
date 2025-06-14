@@ -1,4 +1,4 @@
-# 📧 REST API Email Sementara
+# 📧 REST API Temp Mail
 
 REST API untuk layanan email sementara yang dibangun dengan Golang. API ini memungkinkan Anda membuat email sementara, menerima pesan, dan mengelola email melalui HTTP endpoints.
 
